@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -74,14 +75,23 @@ class AddActivity : AppCompatActivity() {
         addBinding.addtvDate.text = selectedDate
 
         addBinding.addAddBtn.setOnClickListener {
-            val todoText = addBinding.addTodo.text.toString()
+            val todoText = addBinding.addTodo.text.toString().trim()
+            val categoryText = addBinding.addetCategory.text.toString().trim()
+
+            // 필수 입력 검증 및 안내 토스트 출력
+            if (todoText.isEmpty() || categoryText.isEmpty()) {
+                Toast.makeText(this, "할 일과 카테고리를 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             CoroutineScope(Dispatchers.IO).launch {
                 todoDao.insertTodo(
-                    TodoEntity(0,todoText,"food01", selectedDate,false)
+                    TodoEntity(0, todoText, "food01", selectedDate, false, categoryText) // 🎯 category 실어서 인서트
                 )
             }
             finish()
         }
+
         addBinding.addCancelBtn.setOnClickListener {
             finish()
         }

@@ -24,6 +24,7 @@ class TodoAdapter : ListAdapter<TodoEntity, TodoAdapter.TodoViewHolder>(callback
 
         holder.binding.cbTodo.isChecked = todo.isComplete ?: false
         holder.binding.tvTodo.text = todo.todo
+        holder.binding.tvCategory.text = todo.category ?: "미분류"
 
         todo.photo?.let{
             holder.binding.ivPhoto.setImageResource(getResource(it))

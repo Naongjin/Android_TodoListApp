@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         Calendar.getInstance().time
     )
 
-    // 리사이클러뷰 제어용 멤버 변수들
     private lateinit var adapter: TodoAdapter
     private var todoCollectJob: Job? = null
 
@@ -60,7 +59,14 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.off -> {
-                finishAffinity()
+                AlertDialog.Builder(this).apply {
+                    setTitle("앱 종료")
+                    setMessage("앱을 종료하시겠습니까?")
+                    setPositiveButton("종료") { _, _ -> finishAffinity() }
+                    setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+                    create()
+                    show()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -78,14 +84,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // 1. 어댑터 인스턴스 생성 및 리사이클러뷰 연결
         adapter = TodoAdapter()
         binding.rvTodo.layoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
         binding.rvTodo.adapter = adapter
 
-        // 2. Chip 클릭 실시간 DB 갱신 리스너 연결
         adapter.checkListener = { updatedTodo ->
             CoroutineScope(Dispatchers.IO).launch {
                 todoDao.updateTodo(updatedTodo)
@@ -99,7 +103,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         adapter.longCheckListener = { targetTodo ->
-
             val builder: AlertDialog.Builder = AlertDialog.Builder(this).apply {
                 setTitle("할 일 삭제")
                 setMessage("${targetTodo.todo}\n할 일을 삭제하시겠습니까?")
@@ -117,21 +120,17 @@ class MainActivity : AppCompatActivity() {
             dialog.show()
         }
 
-        // 3. 처음 화면이 켜졌을 때는 기본값(오늘 날짜) 세팅 및 데이터 감시 시작
         binding.tvDate.text = selectedDate
         fetchTodosByDate(selectedDate)
 
-        // 4. 사용자가 달력을 클릭해 날짜를 바꿀 때마다 해당 날짜 데이터로 수위칭
         binding.cvCalendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
             selectedDate = String.format(Locale.getDefault(), "%d.%02d.%02d.", year, month + 1, dayOfMonth)
             binding.tvDate.text = selectedDate
 
-            // 달력 바뀔 때마다 새 파이프라인 구독
             fetchTodosByDate(selectedDate)
         }
     }
 
-    // 날짜별 투두 데이터를 실시간으로 가져오는 독립 함수 (안전하게 onCreate 밖에 배치)
     private fun fetchTodosByDate(date: String) {
         todoCollectJob?.cancel()
         todoCollectJob = lifecycleScope.launch {

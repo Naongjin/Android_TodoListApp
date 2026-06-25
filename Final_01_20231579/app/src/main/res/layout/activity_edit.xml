@@ -5,17 +5,19 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditActivity"> <TextView
-    android:id="@+id/editTitle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:text="할 일 수정"
-    android:textSize="28sp"
-    android:textStyle="bold"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".EditActivity">
+
+    <TextView
+        android:id="@+id/editTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="할 일 수정"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CalendarView
         android:id="@+id/editcvCalendar"
@@ -26,7 +28,9 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTitle" /> <TextView
+        app:layout_constraintTop_toBottomOf="@+id/editTitle" />
+
+    <TextView
         android:id="@+id/edittvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,13 +40,17 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editcvCalendar" /> <ImageView
+        app:layout_constraintTop_toBottomOf="@+id/editcvCalendar" />
+
+    <ImageView
         android:id="@+id/editivImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTodo" app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTodo" app:srcCompat="@mipmap/ic_launcher" />
+        app:layout_constraintBottom_toBottomOf="@+id/editTodo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTodo"
+        app:srcCompat="@mipmap/ic_launcher" />
 
     <EditText
         android:id="@+id/editTodo"
@@ -55,24 +63,45 @@
         android:hint="할 일을 입력하세요"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editivImage" app:layout_constraintTop_toBottomOf="@+id/edittvDate" /> <Button
+        app:layout_constraintStart_toEndOf="@+id/editivImage"
+        app:layout_constraintTop_toBottomOf="@+id/edittvDate" />
+
+    <EditText
+        android:id="@+id/editetCategory"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="카테고리를 입력하세요"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/editTodo"
+        app:layout_constraintStart_toStartOf="@+id/editTodo"
+        app:layout_constraintTop_toBottomOf="@+id/editTodo" />
+
+    <Button
         android:id="@+id/editAddBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="12dp"
         android:text="수정"
-        app:layout_constraintEnd_toStartOf="@+id/editCancelBtn" app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/editCancelBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTodo" /> <Button
+        app:layout_constraintTop_toBottomOf="@+id/editetCategory" />
+
+    <Button
         android:id="@+id/editCancelBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:text="취소"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editAddBtn" app:layout_constraintTop_toBottomOf="@+id/editTodo" /> </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintStart_toEndOf="@+id/editAddBtn"
+        app:layout_constraintTop_toBottomOf="@+id/editetCategory" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

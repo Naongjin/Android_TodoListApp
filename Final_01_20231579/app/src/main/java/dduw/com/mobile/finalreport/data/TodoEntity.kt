@@ -11,5 +11,6 @@ data class TodoEntity(
     @ColumnInfo(name="todo_name") var todo: String?,
     @ColumnInfo(name="todo_photo") var photo: String?,
     @ColumnInfo(name="todo_date") var date: String?,
-    @ColumnInfo(name="todo_isComplete") var isComplete: Boolean?
+    @ColumnInfo(name="todo_isComplete") var isComplete: Boolean?,
+    @ColumnInfo(name="todo_category") var category: String?
 ): Serializable
