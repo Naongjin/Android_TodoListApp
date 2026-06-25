@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.info -> {
-                //val intent = Intent(this, InfoActivity::class.java)
-                //startActivity(intent)
+                val intent = Intent(this, InfoActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.off -> {
@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         binding.rvTodo.layoutManager = LinearLayoutManager(this).apply{
             orientation = LinearLayoutManager.VERTICAL
         }
+        binding.rvTodo.adapter = adapter
 
 
         lifecycleScope.launch {
