@@ -20,4 +20,7 @@ interface TodoDao {
 
     @Query("SELECT * FROM todo_table")
     fun getTodos(): Flow<List<TodoEntity>>
+
+    @Query("SELECT * FROM todo_table WHERE todo_date = :selectedDate ORDER BY todo_isComplete ASC")
+    fun getTodosByDate(selectedDate: String): Flow<List<TodoEntity>>
 }

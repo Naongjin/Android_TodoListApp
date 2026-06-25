@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         TodoDatabase.getDatabase(this).todoDao()
     }
 
+    private var selectedDate: String = SimpleDateFormat("yyyy.MM.dd.", Locale.getDefault()).format(
+        Calendar.getInstance().time)
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.off -> {
-                finish()
+                finishAffinity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -66,16 +69,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        /*
-        val todoDao = TodoDao()
-        val adapter = TodoAdapter(todoDao.todos.toMutableList())
 
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
-
-        binding.rvTodo.layoutManager = layoutManager
-        binding.rvTodo.adapter = adapter
-         */
         val formatter = SimpleDateFormat("yyyy.MM.dd.", Locale.getDefault())
         val dateString = formatter.format(Calendar.getInstance().time)
 
@@ -85,7 +79,15 @@ class MainActivity : AppCompatActivity() {
         }
         binding.rvTodo.adapter = adapter
 
+        binding.tvDate.text = selectedDate
+        binding.cvCalendar.setOnDateChangeListener {
+                _,year,month, dayOfMonth ->
+            selectedDate = String.format(Locale.getDefault(), "%d.%02d.%02d.", year, month + 1, dayOfMonth)
+            binding.tvDate.text = selectedDate
+        }
 
+        // 기존 lifecycleScope를 Job을 사용하여 앱의 기능(해당 날짜의 투두리스트 표시)에 맞게 심화시켰습니다.
+        /*
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 val listFlow = todoDao.getTodos()
@@ -94,7 +96,36 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        */
+        var todoCollectJob: kotlinx.coroutines.Job? = null
+        fun fetchTodosByDate(date: String){
+            // 새로운 날짜를 선택하면, 이전 날짜를 감시하던 코루틴은 취소(cancel)합니다.
+            todoCollectJob?.cancel()
 
+            // 지정된 날짜로 DB 파이프라인을 새로 연결합니다.
+            todoCollectJob = lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED){
+                    todoDao.getTodosByDate(date) // TodoDao에서 만든 쿼리 메서드 호출
+                        .distinctUntilChanged()
+                        .collect { todos ->
+                            adapter.submitList(todos)
+                        }
+                }
+            }
+        }
+
+        // 1. 처음 화면이 켜졌을 때는 기본값(오늘 날짜) 데이터 로드
+        binding.tvDate.text = selectedDate
+        fetchTodosByDate(selectedDate)
+
+        // 2. 사용자가 달력을 클릭해 날짜를 바꿀 때마다 해당 날짜 데이터로 변경
+        binding.cvCalendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            selectedDate = String.format(Locale.getDefault(), "%d.%02d.%02d.", year, month + 1, dayOfMonth)
+            binding.tvDate.text = selectedDate
+
+            // 달력 날짜를 바꿀 때마다 호출하면 하단의 리사이클러뷰의 내용이 바뀜
+            fetchTodosByDate(selectedDate)
+        }
 
     }
 }

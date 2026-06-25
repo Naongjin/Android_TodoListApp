@@ -44,12 +44,12 @@ class AddActivity : AppCompatActivity() {
                 true
             }
             R.id.info -> {
-                //val intent = Intent(this, InfoActivity::class.java)
-                //startActivity(intent)
+                val intent = Intent(this, InfoActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.off -> {
-                finish()
+                finishAffinity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
