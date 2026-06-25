@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add"
+        android:icon="@drawable/plus"
+        android:title="할 일 추가" />
+    <item
+        android:id="@+id/info"
+        android:title="개발자 소개" />
+    <item
+        android:id="@+id/off"
+        android:title="종료" />
+</menu>

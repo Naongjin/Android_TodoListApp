@@ -1,6 +1,7 @@
 package dduw.com.mobile.finalreport
 
 class TodoDao {
+    /*
     private val _todos = mutableListOf<TodoDto>()
 
     val todos: List<TodoDto>
@@ -13,4 +14,5 @@ class TodoDao {
     init{
         _todos.add(TodoDto(R.drawable.food01, "양치질하기", 260625, false) )
     }
+    */
 }
