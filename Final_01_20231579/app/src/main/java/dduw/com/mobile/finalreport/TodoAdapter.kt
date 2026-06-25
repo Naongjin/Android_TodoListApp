@@ -20,15 +20,19 @@ class TodoAdapter : ListAdapter<TodoEntity, TodoAdapter.TodoViewHolder>(callback
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todo = getItem(position)
         //재사용 시 오작동을 막기 위해 기존 리스너를 잠시 null로 비움
-        holder.binding.chipTodo.setOnCheckedChangeListener(null)
+        holder.binding.cbTodo.setOnCheckedChangeListener(null)
 
-        holder.binding.chipTodo.isChecked = todo.isComplete ?: false
+        holder.binding.cbTodo.isChecked = todo.isComplete ?: false
         holder.binding.tvTodo.text = todo.todo
 
         todo.photo?.let{
             holder.binding.ivPhoto.setImageResource(getResource(it))
         }
 
+        holder.binding.cbTodo.setOnCheckedChangeListener { _, isChecked ->
+            val updatedTodo = todo.copy(isComplete = isChecked)
+            checkListener?.invoke(updatedTodo)
+        }
     }
 
     private fun getResource(image: String): Int{
@@ -49,12 +53,20 @@ class TodoAdapter : ListAdapter<TodoEntity, TodoAdapter.TodoViewHolder>(callback
                     it(bindingAdapterPosition)
                 }
             }
+            binding.root.setOnLongClickListener {
+                val position = bindingAdapterPosition
+                if(position != RecyclerView.NO_POSITION){
+                    longCheckListener?.invoke(getItem(position))
+                }
+                true
+            }
         }
 
     }
 
     val clickListener: ((pos: Int) -> Unit) ?= null
-
+    var checkListener: ((todo: TodoEntity) -> Unit) ?= null
+    var longCheckListener: ((todo: TodoEntity) -> Unit) ?= null
     companion object{
         val callback = object: DiffUtil.ItemCallback<TodoEntity>(){
             override fun areItemsTheSame(

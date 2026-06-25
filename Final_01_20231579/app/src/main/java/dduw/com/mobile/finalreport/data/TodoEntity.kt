@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity ("todo_table")
 data class TodoEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name="todo_name") var todo: String?,
     @ColumnInfo(name="todo_photo") var photo: String?,
     @ColumnInfo(name="todo_date") var date: String?,

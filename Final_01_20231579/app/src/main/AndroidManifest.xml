@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Final_01_20231579">
         <activity
+            android:name=".EditActivity"
+            android:exported="false" />
+        <activity
             android:name=".InfoActivity"
             android:exported="false" />
         <activity
