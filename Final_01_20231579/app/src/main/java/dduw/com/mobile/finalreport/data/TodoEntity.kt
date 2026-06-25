@@ -3,6 +3,7 @@ package dduw.com.mobile.finalreport.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity ("todo_table")
 data class TodoEntity(
@@ -11,4 +12,4 @@ data class TodoEntity(
     @ColumnInfo(name="todo_photo") var photo: String?,
     @ColumnInfo(name="todo_date") var date: String?,
     @ColumnInfo(name="todo_isComplete") var isComplete: Boolean?
-)
+): Serializable

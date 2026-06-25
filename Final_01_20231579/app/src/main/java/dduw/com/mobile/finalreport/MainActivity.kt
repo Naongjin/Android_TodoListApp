@@ -91,6 +91,13 @@ class MainActivity : AppCompatActivity() {
                 todoDao.updateTodo(updatedTodo)
             }
         }
+
+        adapter.clickListener = {pos ->
+            val todoItem = adapter.currentList[pos]
+            val intent = Intent(this, EditActivity::class.java)
+            intent.putExtra("edit_todo", todoItem)
+            startActivity(intent)
+        }
         adapter.longCheckListener = { targetTodo ->
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this).apply {

@@ -64,7 +64,7 @@ class TodoAdapter : ListAdapter<TodoEntity, TodoAdapter.TodoViewHolder>(callback
 
     }
 
-    val clickListener: ((pos: Int) -> Unit) ?= null
+    var clickListener: ((pos: Int) -> Unit) ?= null
     var checkListener: ((todo: TodoEntity) -> Unit) ?= null
     var longCheckListener: ((todo: TodoEntity) -> Unit) ?= null
     companion object{
