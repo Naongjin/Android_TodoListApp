@@ -3,14 +3,13 @@ package dduw.com.mobile.finalreport
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dduw.com.mobile.finalreport.data.TodoEntity
 import dduw.com.mobile.finalreport.databinding.ListItemBinding
 
-class TodoAdapter(val todoList: MutableList<TodoDto>): RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+class TodoAdapter : ListAdapter<TodoEntity, TodoAdapter.TodoViewHolder>(callback) {
     val TAG = "TodoAdapter"
-
-    override fun getItemCount(): Int = todoList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,10 +18,17 @@ class TodoAdapter(val todoList: MutableList<TodoDto>): RecyclerView.Adapter<Todo
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
-        val todos = todoList[position]
-        holder.binding.chipTodo.isChecked = todos.isComplete
-        holder.binding.tvTodo.text = todos.todo
-        holder.binding.ivPhoto.setImageResource(todos.photo)
+        val todo = getItem(position)
+        //재사용 시 오작동을 막기 위해 기존 리스너를 잠시 null로 비움
+        holder.binding.chipTodo.setOnCheckedChangeListener(null)
+
+        holder.binding.chipTodo.isChecked = todo.isComplete ?: false
+        holder.binding.tvTodo.text = todo.todo
+
+        todo.photo?.let{
+            holder.binding.ivPhoto.setImageResource(getResource(it))
+        }
+
     }
 
     private fun getResource(image: String): Int{

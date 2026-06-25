@@ -8,18 +8,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import dduw.com.mobile.finalreport.data.TodoDatabase
 import dduw.com.mobile.finalreport.data.TodoEntity
 import dduw.com.mobile.finalreport.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import java.sql.Date
-import java.time.LocalDate
-import java.time.LocalDateTime
-
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     val TAG = "MainActivity"
@@ -74,11 +76,22 @@ class MainActivity : AppCompatActivity() {
         binding.rvTodo.layoutManager = layoutManager
         binding.rvTodo.adapter = adapter
          */
-        val formatter = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
-        val dateString = formatter.format(java.util.Date())
+        val formatter = SimpleDateFormat("yyyy.MM.dd.", Locale.getDefault())
+        val dateString = formatter.format(Calendar.getInstance().time)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            todoDao.insertTodo(TodoEntity(0,"양치질하기",R.drawable.food01, dateString, false))
+        val adapter = TodoAdapter()
+        binding.rvTodo.layoutManager = LinearLayoutManager(this).apply{
+            orientation = LinearLayoutManager.VERTICAL
+        }
+
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                val listFlow = todoDao.getTodos()
+                listFlow.distinctUntilChanged().collect {
+                    todos -> adapter.submitList(todos)
+                }
+            }
         }
 
 
